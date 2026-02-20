@@ -21,14 +21,16 @@ function TaskCard({ task, onEdit, onDelete }) {
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className="bg-white p-4 mb-2 rounded shadow cursor-pointer"
+      className="bg-white p-4 mb-2 rounded shadow"
     >
-      <h3 className="font-bold">{task.title}</h3>
-      <p>{task.description}</p>
-      <button onClick={() => onEdit(task)} className="mr-2 text-blue-500">Edit</button>
-      <button onClick={() => onDelete(task.id)} className="text-red-500">Delete</button>
+      <div {...attributes} {...listeners} className="cursor-pointer">
+        <h3 className="font-bold">{task.title}</h3>
+        <p>{task.description}</p>
+      </div>
+      <div className="mt-2">
+        <button data-no-dnd="true" aria-label={`Edit task: ${task.title}`} onClick={() => onEdit(task)} className="mr-2 text-blue-500">Edit</button>
+        <button data-no-dnd="true" aria-label={`Delete task: ${task.title}`} onClick={() => onDelete(task.id)} className="text-red-500">Delete</button>
+      </div>
     </div>
   );
 }

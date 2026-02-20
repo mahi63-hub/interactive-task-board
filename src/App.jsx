@@ -28,17 +28,17 @@ function App() {
   useEffect(() => {
     loadPersistedState();
     fetchInitialData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     persistState();
-  }, [tasks, columns]);
+  }, [tasks, columns]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleAddTask = async (columnId, title, description) => {
     try {
       await addTask(columnId, title, description);
     } catch (err) {
-      // Error handled in store
+      console.error(err);
     }
   };
 
@@ -50,7 +50,7 @@ function App() {
     try {
       await updateTask(taskId, updatedFields);
     } catch (err) {
-      // Error handled in store
+      console.error(err);
     }
   };
 
@@ -58,7 +58,7 @@ function App() {
     try {
       await deleteTask(taskId);
     } catch (err) {
-      // Error handled in store
+      console.error(err);
     }
   };
 
@@ -67,11 +67,24 @@ function App() {
     if (!over) return;
 
     const taskId = active.id;
-    const destColumnId = over.id;
-
     const task = tasks.find(t => t.id === taskId);
-    if (task && task.columnId !== destColumnId) {
-      moveTask(taskId, task.columnId, destColumnId, 0, 0); // Simplified
+    if (!task) return;
+
+    let destColumnId = over.id;
+    let newPosition = 0;
+
+    // Check if over is a task (for reordering)
+    const overTask = tasks.find(t => t.id === over.id);
+    if (overTask) {
+      destColumnId = overTask.columnId;
+      newPosition = tasks.filter(t => t.columnId === destColumnId).findIndex(t => t.id === over.id);
+    } else {
+      // Dropping on column
+      newPosition = tasks.filter(t => t.columnId === destColumnId).length;
+    }
+
+    if (task.columnId !== destColumnId || overTask) {
+      moveTask(taskId, task.columnId, destColumnId, newPosition);
     }
   };
 

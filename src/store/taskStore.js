@@ -1,6 +1,6 @@
 // src/store/taskStore.js
 import { create } from 'zustand';
-import { fetchTasks, addTaskApi, updateTaskApi, deleteTaskApi, moveTaskApi } from '../services/mockApi';
+import { fetchTasks, fetchColumns, addTaskApi, updateTaskApi, deleteTaskApi, moveTaskApi } from '../services/mockApi';
 import { v4 as uuidv4 } from 'uuid';
 
 export const useTaskStore = create((set, get) => ({
@@ -68,21 +68,21 @@ export const useTaskStore = create((set, get) => ({
     }
   },
 
-  moveTask: async (taskId, sourceColumnId, destColumnId, sourceIndex, destIndex) => {
+  moveTask: async (taskId, sourceColumnId, destColumnId, newPosition) => {
     const originalTasks = get().tasks;
-    const taskToMove = originalTasks.find(t => t.id === taskId);
+    const taskIndex = originalTasks.findIndex(t => t.id === taskId);
+    if (taskIndex === -1) return;
 
-    // Optimistic Update: Temporarily move task in UI
-    set(state => {
-      const newTasks = state.tasks.map(t => t.id === taskId ? { ...t, columnId: destColumnId } : t);
-      // Advanced logic for ordering within columns would go here
-      return { tasks: newTasks };
-    });
+    const newTasks = [...originalTasks];
+    const [movedTask] = newTasks.splice(taskIndex, 1);
+    movedTask.columnId = destColumnId;
+    newTasks.splice(newPosition, 0, movedTask);
+
+    set({ tasks: newTasks });
 
     try {
-      await moveTaskApi(taskId, destColumnId, destIndex); // Simulate API call
+      await moveTaskApi(taskId, destColumnId, newPosition);
     } catch (err) {
-      // Rollback on failure
       set({ tasks: originalTasks, error: err.message });
       throw err;
     }

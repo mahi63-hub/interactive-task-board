@@ -21,14 +21,18 @@ function EditTaskModal({ task, onSave, onClose }) {
       <div className="bg-white p-4 rounded">
         <h2>Edit Task</h2>
         <form onSubmit={handleSubmit}>
+          <label htmlFor="edit-title" className="block">Title</label>
           <input
+            id="edit-title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
             className="border p-2 block mb-2"
           />
+          <label htmlFor="edit-description" className="block">Description</label>
           <textarea
+            id="edit-description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
