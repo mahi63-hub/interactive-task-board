@@ -1,4 +1,3 @@
-// src/components/AddTaskForm.jsx
 import React, { useState } from 'react';
 
 function AddTaskForm({ onAdd }) {
@@ -7,7 +6,7 @@ function AddTaskForm({ onAdd }) {
   const [columnId, setColumnId] = useState('todo');
 
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     onAdd(columnId, title, description);
     setTitle('');
     setDescription('');
@@ -23,7 +22,7 @@ function AddTaskForm({ onAdd }) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        // className="border p-2 mr-2"
+        className="border p-2 mr-2"
       />
       <label htmlFor="description" className="block">Description</label>
       <input
