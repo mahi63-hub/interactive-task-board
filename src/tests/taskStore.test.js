@@ -1,9 +1,7 @@
-// src/tests/taskStore.test.js
 import { describe, it, expect, vi } from 'vitest';
 import { create } from 'zustand';
 import { taskStore } from '../store/taskStore';
 
-// Mock the mockApi
 vi.mock('../services/mockApi', () => ({
   fetchTasks: vi.fn(() => Promise.resolve([{ id: '1', title: 'Test', columnId: 'todo', position: 0 }])),
   fetchColumns: vi.fn(() => Promise.resolve([{ id: 'todo', title: 'To Do' }])),

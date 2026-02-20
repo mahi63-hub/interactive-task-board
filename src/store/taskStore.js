@@ -1,4 +1,3 @@
-// src/store/taskStore.js
 import { create } from 'zustand';
 import { fetchTasks, fetchColumns, addTaskApi, updateTaskApi, deleteTaskApi, moveTaskApi } from '../services/mockApi';
 import { v4 as uuidv4 } from 'uuid';

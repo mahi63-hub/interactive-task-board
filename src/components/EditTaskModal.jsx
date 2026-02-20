@@ -1,4 +1,3 @@
-// src/components/EditTaskModal.jsx
 import React, { useState, useEffect } from 'react';
 
 function EditTaskModal({ task, onSave, onClose }) {
